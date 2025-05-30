@@ -8,7 +8,7 @@ PythonのFlaskフレームワークを使用したシンプルなタスク管理
 - タスクの一覧表示（現在登録されているタスクを表示）
 - タスクの完了フラグの切り替え
 - タスクの削除
-- メモリ上でのタスク管理（Pythonリスト使用）
+- SQLiteデータベースでのタスク管理（データ永続化）
 
 ## 使用方法
 
@@ -28,6 +28,20 @@ python app.py
 
 ブラウザで `http://localhost:5000` にアクセスしてください。
 
+## データベース
+
+アプリケーションはSQLiteデータベース（`tasks.db`）を使用してタスクデータを永続化します。データベースファイルは初回起動時に自動的に作成され、以下のテーブル構造を持ちます：
+
+```sql
+CREATE TABLE tasks (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    title TEXT NOT NULL,
+    completed INTEGER DEFAULT 0
+);
+```
+
+データベースファイルはアプリケーション再起動後もデータを保持します。
+
 ## ルート構成
 
 - `/` : タスク一覧と追加フォームを表示
@@ -42,5 +56,6 @@ python app.py
 ├── templates/
 │   └── index.html        # HTMLテンプレート
 ├── requirements.txt      # Python依存関係
+├── tasks.db              # SQLiteデータベース（実行時に自動作成）
 └── README.md            # このファイル
 ```

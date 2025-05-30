@@ -28,9 +28,10 @@ def add_task():
     
     return redirect(url_for('index'))
 
-@app.route('/toggle/<int:task_id>')
-def toggle_task(task_id):
+@app.route('/toggle', methods=['POST'])
+def toggle_task():
     """Toggle task completion status"""
+    task_id = int(request.form.get('task_id'))
     for task in tasks:
         if task['id'] == task_id:
             task['completed'] = not task['completed']

@@ -39,6 +39,14 @@ def toggle_task():
     
     return redirect(url_for('index'))
 
+@app.route('/delete', methods=['POST'])
+def delete_task():
+    """Delete a task"""
+    global tasks
+    task_id = int(request.form.get('task_id'))
+    tasks = [task for task in tasks if task['id'] != task_id]
+    return redirect(url_for('index'))
+
 import os
 
 if __name__ == '__main__':

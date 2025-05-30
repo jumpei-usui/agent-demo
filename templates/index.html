@@ -67,9 +67,12 @@
                 <div class="task {{ 'completed' if task.completed else '' }}">
                     <strong>{{ task.title }}</strong>
                     <span style="float: right;">
-                        <a href="/toggle/{{ task.id }}" class="toggle-btn">
-                            {{ '未完了にする' if task.completed else '完了にする' }}
-                        </a>
+                        <form action="/toggle" method="post" style="display: inline;">
+                            <input type="hidden" name="task_id" value="{{ task.id }}">
+                            <button type="submit" class="toggle-btn">
+                                {{ '未完了にする' if task.completed else '完了にする' }}
+                            </button>
+                        </form>
                         <span style="margin-left: 10px;">
                             {{ '完了済み' if task.completed else '未完了' }}
                         </span>

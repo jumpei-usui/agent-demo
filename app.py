@@ -38,5 +38,9 @@ def toggle_task(task_id):
     
     return redirect(url_for('index'))
 
+import os
+
 if __name__ == '__main__':
-    app.run(debug=True)
+    # Set debug mode based on the FLASK_ENV environment variable
+    debug_mode = os.getenv('FLASK_ENV', 'production') == 'development'
+    app.run(debug=debug_mode)

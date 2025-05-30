@@ -86,7 +86,8 @@
                                 {{ '未完了にする' if task.completed else '完了にする' }}
                             </button>
                         </form>
-                        <form action="/delete/{{ task.id }}" method="post" style="display: inline;">
+                        <form action="/delete" method="post" style="display: inline;">
+                            <input type="hidden" name="task_id" value="{{ task.id }}">
                             <button type="submit" class="delete-btn" onclick="return confirm('このタスクを削除しますか？')">
                                 削除
                             </button>

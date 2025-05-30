@@ -33,7 +33,7 @@ python app.py
 - `/` : タスク一覧と追加フォームを表示
 - `/add` : タスク追加 (POST)
 - `/toggle` : タスクの完了フラグを切り替え (POST)
-- `/delete/<task_id>` : タスクの削除 (POST/DELETE)
+- `/delete` : タスクの削除 (POST)
 
 ## ファイル構成
 

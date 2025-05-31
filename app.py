@@ -19,14 +19,6 @@ def init_db():
             due_date DATE
         )
     ''')
-    
-    # Add due_date column to existing table if it doesn't exist
-    try:
-        cursor.execute('ALTER TABLE tasks ADD COLUMN due_date DATE')
-    except sqlite3.OperationalError:
-        # Column already exists or other error, continue
-        pass
-    
     conn.commit()
     conn.close()
 

@@ -15,7 +15,8 @@ def init_db():
         CREATE TABLE IF NOT EXISTS tasks (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             title TEXT NOT NULL,
-            completed INTEGER DEFAULT 0
+            completed INTEGER DEFAULT 0,
+            due_date DATE
         )
     ''')
     conn.commit()
@@ -28,7 +29,7 @@ def get_all_tasks():
     """Get all tasks from database"""
     conn = sqlite3.connect(DB_FILE)
     cursor = conn.cursor()
-    cursor.execute('SELECT id, title, completed FROM tasks ORDER BY id')
+    cursor.execute('SELECT id, title, completed, due_date FROM tasks ORDER BY id')
     rows = cursor.fetchall()
     conn.close()
     
@@ -38,15 +39,16 @@ def get_all_tasks():
         tasks.append({
             'id': row[0],
             'title': row[1],
-            'completed': bool(row[2])
+            'completed': bool(row[2]),
+            'due_date': row[3]
         })
     return tasks
 
-def add_task_to_db(title):
+def add_task_to_db(title, due_date=None):
     """Add a new task to database"""
     conn = sqlite3.connect(DB_FILE)
     cursor = conn.cursor()
-    cursor.execute('INSERT INTO tasks (title, completed) VALUES (?, 0)', (title,))
+    cursor.execute('INSERT INTO tasks (title, completed, due_date) VALUES (?, 0, ?)', (title, due_date))
     conn.commit()
     conn.close()
 
@@ -76,8 +78,14 @@ def index():
 def add_task():
     """Add a new task"""
     title = request.form.get('title', '').strip()
+    due_date = request.form.get('due_date', '').strip()
+    
+    # Convert empty string to None for database
+    if not due_date:
+        due_date = None
+    
     if title:
-        add_task_to_db(title)
+        add_task_to_db(title, due_date)
     
     return redirect(url_for('index'))
 

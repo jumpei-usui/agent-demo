@@ -29,11 +29,6 @@
             padding: 8px;
             margin-right: 10px;
         }
-        input[type="date"] {
-            width: 100px;
-            padding: 8px;
-            margin-right: 10px;
-        }
         button {
             padding: 8px 15px;
             cursor: pointer;
@@ -73,7 +68,6 @@
         <h2>新しいタスクを追加</h2>
         <form action="/add" method="post">
             <input type="text" name="title" placeholder="タスクのタイトルを入力してください" required>
-            <input type="date" name="due_date" placeholder="YYYY/MM/DD">
             <button type="submit">追加</button>
         </form>
     </div>
@@ -85,8 +79,6 @@
             {% for task in tasks %}
                 <div class="task {{ 'completed' if task.completed else '' }}">
                     <strong>{{ task.title }}</strong>
-                    <br>
-                    <small>期限：{{ task.due_date if task.due_date else '未設定' }}</small>
                     <span style="float: right;">
                         <form action="/toggle" method="post" style="display: inline;">
                             <input type="hidden" name="task_id" value="{{ task.id }}">

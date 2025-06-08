@@ -4,82 +4,156 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>タスク管理アプリ</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
+        :root {
+            --color-text-default: #1e1e1e;
+            --color-background-default: #ffffff;
+            --color-background-secondary: #f5f5f5;
+            --color-border-default: #d9d9d9;
+            --space-200: 8px;
+            --space-300: 12px;
+            --space-400: 16px;
+            --space-800: 32px;
+            --space-1600: 64px;
+            --radius-200: 8px;
+        }
         body {
-            font-family: Arial, sans-serif;
-            max-width: 600px;
-            margin: 50px auto;
-            padding: 20px;
+            font-family: 'Inter', sans-serif;
+            max-width: 680px;
+            margin: 0 auto;
+            padding: var(--space-1600);
+            background-color: var(--color-background-default);
+            color: var(--color-text-default);
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-800);
+        }
+        h1 {
+            margin: 0;
+            font-weight: 700;
+            font-size: 72px;
+            line-height: 1.2;
+            letter-spacing: -2.16px;
+        }
+        h2 {
+            margin: 0;
+            font-weight: 700;
+            font-size: 48px;
+            line-height: 1.2;
+            letter-spacing: -0.96px;
         }
         .task {
-            border: 1px solid #ddd;
-            margin: 10px 0;
-            padding: 10px;
-            border-radius: 5px;
+            border: 1px solid var(--color-border-default);
+            padding: var(--space-200) var(--space-400);
+            border-radius: var(--radius-200);
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .task-title {
+            font-weight: 600;
+            font-size: 16px;
+            line-height: 1.4;
         }
         .completed {
-            background-color: #f0f0f0;
+            background-color: var(--color-background-secondary);
+        }
+        .completed .task-title {
             text-decoration: line-through;
         }
-        .form-group {
-            margin: 20px 0;
+        .input-group {
+            display: flex;
+            flex-direction: row;
+            gap: var(--space-400);
+            align-items: center;
+            width: 100%;
         }
         input[type="text"] {
-            width: 300px;
-            padding: 8px;
-            margin-right: 10px;
+            flex-grow: 1;
+            padding: var(--space-300) var(--space-400);
+            border: 1px solid var(--color-border-default);
+            border-radius: var(--radius-200);
+            font-size: 16px;
+            line-height: 1;
+        }
+        input[type="text"]::placeholder {
+            color: #b3b3b3;
         }
         button {
-            padding: 8px 15px;
             cursor: pointer;
+            font-size: 16px;
+            line-height: 1;
+        }
+        .action-group {
+            display: flex;
+            flex-direction: row;
+            gap: var(--space-400);
+            align-items: center;
         }
         .toggle-btn {
-            background-color: #007bff;
+            background-color: #2c2c2c;
             color: white;
-            border: none;
-            padding: 5px 10px;
-            border-radius: 3px;
+            border: 1px solid #2c2c2c;
+            padding: var(--space-200);
+            border-radius: var(--radius-200);
             text-decoration: none;
             display: inline-block;
+            font-weight: 400;
         }
         .toggle-btn:hover {
-            background-color: #0056b3;
+            opacity: 0.9;
         }
         .delete-btn {
-            background-color: #dc3545;
-            color: white;
-            border: none;
-            padding: 5px 10px;
-            border-radius: 3px;
+            background-color: #ec221f;
+            color: #fee9e7;
+            border: 1px solid #c00f0c;
+            padding: var(--space-200);
+            border-radius: var(--radius-200);
             text-decoration: none;
             display: inline-block;
-            margin-left: 5px;
+            font-weight: 400;
         }
         .delete-btn:hover {
-            background-color: #c82333;
+            opacity: 0.9;
+        }
+        .status {
+            font-size: 16px;
+            line-height: 1.4;
+            font-weight: 400;
+        }
+        .task-list {
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-400);
+            width: 100%;
         }
     </style>
 </head>
 <body>
     <h1>タスク管理アプリ</h1>
     
-    <!-- タスク追加フォーム -->
-    <div class="form-group">
-        <h2>新しいタスクを追加</h2>
-        <form action="/add" method="post">
+    <h2>新しいタスクを追加</h2>
+
+    <form action="/add" method="post">
+        <div class="input-group">
             <input type="text" name="title" placeholder="タスクのタイトルを入力してください" required>
-            <button type="submit">追加</button>
-        </form>
-    </div>
+            <button type="submit" class="toggle-btn">追加</button>
+        </div>
+    </form>
     
     <!-- タスク一覧 -->
-    <div>
-        <h2>タスク一覧</h2>
+    <h2>タスク一覧</h2>
+
+    <div class="task-list">
         {% if tasks %}
             {% for task in tasks %}
                 <div class="task {{ 'completed' if task.completed else '' }}">
-                    <strong>{{ task.title }}</strong>
-                    <span style="float: right;">
+                    <div class="task-title">{{ task.title }}</div>
+                    <div class="action-group">
                         <form action="/toggle" method="post" style="display: inline;">
                             <input type="hidden" name="task_id" value="{{ task.id }}">
                             <button type="submit" class="toggle-btn">
@@ -92,15 +166,14 @@
                                 削除
                             </button>
                         </form>
-                        <span style="margin-left: 10px;">
+                        <span class="status">
                             {{ '完了済み' if task.completed else '未完了' }}
                         </span>
-                    </span>
+                    </div>
                 </div>
             {% endfor %}
         {% else %}
-            <p>タスクがありません。上のフォームから新しいタスクを追加してください。</p>
-        {% endif %}
-    </div>
+        <p>タスクがありません。上のフォームから新しいタスクを追加してください。</p>
+    {% endif %}
 </body>
 </html>
